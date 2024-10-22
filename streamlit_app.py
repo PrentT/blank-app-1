@@ -74,7 +74,8 @@ with col1:
                     atmosphere=atmosphere if atmosphere else "N/A",
                     budget=budget if budget else "N/A",
                     existing_pieces=existing_pieces if existing_pieces else "N/A",
-                    uploaded_images=image_summary
+                    uploaded_images=image_summary if image_summary else "N/A",
+                    image_summary=image_summary if image_summary else "N/A"
                 )
                 prompt = f"{context}\n\n{prompt}"
 
