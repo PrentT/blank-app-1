@@ -10,8 +10,8 @@ st.title('Design Project Assistant')
 # Creating columns for left and right layout
 col1, col2 = st.columns(2)
 
-# Placeholder questions in the left column
-with col1:
+# Placeholder questions in the right column
+with col2:
     st.subheader("General Overview")
     if st.button("Autofill Placeholder Values"):
         st.session_state["vision_goals"] = "I’m aiming for a fresh, functional design that suits my lifestyle and personal taste."
