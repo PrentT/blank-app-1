@@ -49,7 +49,9 @@ with col1:
     context = st.text_area("Context for ChatGPT:", "You’re helping to interpret responses from a customer about their upcoming design project. Extract key details from their answers to display them as clear project specifications. All details are optional, so if any information is not provided, leave it blank or state \"N/A\" for that item. Highlight details such as the timeframe, budget, number of rooms, primary use of each room, emotional atmosphere they want, existing furniture or items they want to keep, and consider any uploaded images that provide a sense of the style or vibe desired.\n\nAdditionally, provide three outputs:\n1. A friendly, human-like response that acknowledges the customer's design inputs and summarizes them concisely.\n2. A list of key elements extracted from the input, displayed separately at the top for quick reference in a structured format.\n3. A very short summary of the uploaded image(s) and how they influenced the design suggestions.")
     chat_message = st.text_area("Chat Message (use {variable_name} for placeholders):", "Here’s the customer’s input:\n\n* General Overview: \"{vision_goals}\"\n* Room Use & Function:\n    * Primary Function: \"{primary_function}\"\n    * Traffic Level: \"{traffic}\"\n    * Kids: \"{children_use}\"\n    * Personal or Shared: \"{personal_shared}\"\n* Emotions: \"{atmosphere}\"\n* Budget: \"{budget}\"\n* Existing Furniture/Items: \"{existing_pieces}\"\n* Uploaded Images: {uploaded_images}\n\nUsing this information, please extract and summarize the following project specs. If any information is missing or not mentioned, note it as \"N/A.\"\n* Timeframe:\n* Budget:\n* Number of Rooms:\n* Primary Room Use:\n* Emotional Atmosphere:\n* Existing Furniture/Items:\n* Uploaded Images:\n\nExpected Output Example:\nKey Elements Summary:\n* Timeframe: N/A (Customer hasn’t provided a specific deadline)\n* Budget: {budget}\n* Number of Rooms: N/A\n* Primary Room Use: {primary_function}\n* Emotional Atmosphere: {atmosphere}\n* Existing Furniture/Items: {existing_pieces}\n* Uploaded Images: {uploaded_images}\n\nHuman-Like Summary for Customer: \"Thank you for sharing your vision for your project! Here is what we understand so far:\n\n- **Vision/Goals**: {vision_goals}\n- **Primary Function**: {primary_function}\n- **Traffic Level**: {traffic}\n- **Kids Considerations**: {children_use}\n- **Shared or Personal Use**: {personal_shared}\n- **Emotional Atmosphere**: {atmosphere}\n- **Budget**: {budget}\n- **Existing Pieces**: {existing_pieces}\n\nThis sounds like a fantastic project, and we’re excited to help bring it to life!\"\n\nShort Summary of Uploaded Images: \"{image_summary}\"")
 
-    if st.button("Submit"):
+# Floating footer with Submit button
+with st.sidebar:
+    if st.button("Submit", key="submit_button"):
         if not api_key:
             st.warning("Please provide your API key to proceed.")
         else:
@@ -104,23 +106,23 @@ with col1:
                     chat_response = response.json().get("choices", [])[0].get("message", {}).get("content", "No response from API.")
                     if "Human-Like Summary for Customer:" in chat_response:
                         key_elements, human_summary = chat_response.split("Human-Like Summary for Customer:")
-                        with col2:
+                        with st.sidebar:
                             st.subheader("Key Elements Summary")
                             st.write(key_elements.strip())
                             st.subheader("ChatGPT Response")
                             st.write(human_summary.strip())
                     else:
-                        with col2:
+                        with st.sidebar:
                             st.write(chat_response)
                 else:
-                    with col2:
+                    with st.sidebar:
                         st.error(f"Error: {response.status_code}, {response.text}")
 
             except requests.exceptions.RequestException as e:
                 st.error(f"An error occurred: {e}")
 
             # Display the entire request and response for debugging purposes
-            with st.expander("Debugging Information"):
+            with st.sidebar.expander("Debugging Information"):
                 st.subheader("Request Data")
                 st.json(data)
                 st.subheader("Response Data")
