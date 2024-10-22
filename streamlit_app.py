@@ -61,7 +61,7 @@ with col1:
                     for img in uploaded_images:
                         img_bytes = img.read()
                         encoded_img = base64.b64encode(img_bytes).decode('utf-8')
-                        image_contents.append({"type": "image_base64", "image_base64": {"data": encoded_img}})
+                        image_contents.append({"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{encoded_img}"}})
                     image_summary = "The uploaded images suggest a preference for certain colors, textures, or styles that have been incorporated into the design recommendations."
 
                 # Replace missing placeholders with "N/A" to avoid KeyError
